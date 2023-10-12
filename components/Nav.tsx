@@ -1,7 +1,12 @@
+"use client"
+
 import Link from 'next/link'
 import React from 'react'
+import { usePathname } from 'next/navigation'
 
 const Nav = () => {
+    const pathName = usePathname()
+
     return (
         <nav className="navbar navbar-b navbar-trans navbar-expand-md fixed-top" id="mainNav">
             <div className="container">
@@ -15,16 +20,16 @@ const Nav = () => {
                 <div className="navbar-collapse collapse justify-content-end" id="navbarDefault">
                     <ul className="navbar-nav">
                         <li className="nav-item">
-                            <Link className="nav-link js-scroll active" href="/">Home</Link>
+                            <Link className={pathName == '/' ? 'nav-link js-scroll active' : 'nav-link js-scroll'} href="/">Home</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link js-scroll" href="/about">About</Link>
+                            <Link className={pathName == '/about' ? 'nav-link js-scroll active' : 'nav-link js-scroll'} href="/about">About</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link js-scroll" href="/blog">Blog</Link>
+                            <Link className={pathName.includes('/blog') ? 'nav-link js-scroll active' : 'nav-link js-scroll'} href="/blog">Blog</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link js-scroll" href="/contact">Contact</Link>
+                            <Link className={pathName == '/contact' ? 'nav-link js-scroll active' : 'nav-link js-scroll'} href="/contact">Contact</Link>
                         </li>
                     </ul>
                 </div>

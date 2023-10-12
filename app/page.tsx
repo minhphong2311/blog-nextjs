@@ -3,13 +3,20 @@ import styles from './page.module.css'
 import Link from 'next/link'
 import bg from '../public/img/intro-bg.jpg'
 import { Metadata } from 'next'
+import { getAllBlogs } from '@/services/BlogService'
+import { blogType } from '@/types'
+import moment from 'moment'
 
 export const metadata: Metadata = {
   title: 'Home page',
   description: 'Homepage',
 }
 
-export default function Home() {
+
+export default async function Home() {
+
+  const latestBlogs: blogType[] = await getAllBlogs({ items_per_page: '3' })
+
   return (
     <>
       <div id="home" className="intro route bg-image" style={{ backgroundImage: `url(${bg.src})` }}>
@@ -41,102 +48,37 @@ export default function Home() {
           </div>
 
           <div className="row">
-            <div className="col-md-4">
-              <div className="card card-blog">
-                <div className="card-img">
-                  <a href="blog-single.html"><img src="img/post-1.jpg" alt="" className="img-fluid" /></a>
-                </div>
-                <div className="card-body">
-                  <div className="card-category-box">
-                    <div className="card-category">
-                      <h6 className="category">Travel</h6>
+            {latestBlogs.map(item => {
+              return (
+                <div className="col-md-4">
+                  <div className="card card-blog">
+                    <div className="card-img">
+                      <Link href={`/blog/${item.id}`}><img src={`${process.env.API_URL}/${item.thumbnail}`} alt={item.title} className="img-fluid" /></Link>
+                    </div>
+                    <div className="card-body">
+                      <div className="card-category-box">
+                        <div className="card-category">
+                          <h6 className="category">{item.category.name}</h6>
+                        </div>
+                      </div>
+                      <h3 className="card-title"><Link href={`/blog/${item.id}`}>{item.title}</Link></h3>
+                      <p className="card-description">
+                        {item.summary.length > 120 ? `${item.summary.slice(0, 120)}...` : item.summary}
+                      </p>
+                    </div>
+                    <div className="card-footer">
+                      <div className="post-author">
+                        <img src={`${process.env.API_URL}/${item.user.avatar}`} alt="{item.user.first_name}" className="avatar rounded-circle" />
+                        <span className="author">{item.user.first_name}</span>
+                      </div>
+                      <div className="post-date">
+                        <span className="ion-ios-clock-outline"></span> {moment(item.created_at).format('DD/MM/YYY')}
+                      </div>
                     </div>
                   </div>
-                  <h3 className="card-title"><a href="blog-single.html">See more ideas about Travel</a></h3>
-                  <p className="card-description">
-                    Proin eget tortor risus. Pellentesque in ipsum id orci porta dapibus. Praesent sapien massa, convallis
-                    a pellentesque nec,
-                    egestas non nisi.
-                  </p>
                 </div>
-                <div className="card-footer">
-                  <div className="post-author">
-                    <a href="#">
-                      <img src="img/testimonial-2.jpg" alt="" className="avatar rounded-circle" />
-                      <span className="author">Morgan Freeman</span>
-                    </a>
-                  </div>
-                  <div className="post-date">
-                    <span className="ion-ios-clock-outline"></span> 10 min
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-md-4">
-              <div className="card card-blog">
-                <div className="card-img">
-                  <a href="blog-single.html"><img src="img/post-2.jpg" alt="" className="img-fluid" /></a>
-                </div>
-                <div className="card-body">
-                  <div className="card-category-box">
-                    <div className="card-category">
-                      <h6 className="category">Web Design</h6>
-                    </div>
-                  </div>
-                  <h3 className="card-title"><a href="blog-single.html">See more ideas about Travel</a></h3>
-                  <p className="card-description">
-                    Proin eget tortor risus. Pellentesque in ipsum id orci porta dapibus. Praesent sapien massa, convallis
-                    a pellentesque nec,
-                    egestas non nisi.
-                  </p>
-                </div>
-                <div className="card-footer">
-                  <div className="post-author">
-                    <a href="#">
-                      <img src="img/testimonial-2.jpg" alt="" className="avatar rounded-circle" />
-                      <span className="author">Morgan Freeman</span>
-                    </a>
-                  </div>
-                  <div className="post-date">
-                    <span className="ion-ios-clock-outline"></span> 10 min
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-            <div className="col-md-4">
-              <div className="card card-blog">
-                <div className="card-img">
-                  <a href="blog-single.html"><img src="img/post-3.jpg" alt="" className="img-fluid" /></a>
-                </div>
-                <div className="card-body">
-                  <div className="card-category-box">
-                    <div className="card-category">
-                      <h6 className="category">Web Design</h6>
-                    </div>
-                  </div>
-                  <h3 className="card-title"><a href="blog-single.html">See more ideas about Travel</a></h3>
-                  <p className="card-description">
-                    Proin eget tortor risus. Pellentesque in ipsum id orci porta dapibus. Praesent sapien massa, convallis
-                    a pellentesque nec,
-                    egestas non nisi.
-                  </p>
-                </div>
-                <div className="card-footer">
-                  <div className="post-author">
-                    <a href="#">
-                      <img src="img/testimonial-2.jpg" alt="" className="avatar rounded-circle" />
-                      <span className="author">Morgan Freeman</span>
-                    </a>
-                  </div>
-                  <div className="post-date">
-                    <span className="ion-ios-clock-outline"></span> 10 min
-                  </div>
-                </div>
-              </div>
-            </div>
+              )
+            })}
           </div>
 
         </div>

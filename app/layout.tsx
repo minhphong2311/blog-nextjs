@@ -1,8 +1,10 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-
-const inter = Inter({ subsets: ['latin'] })
+import Script from 'next/script'
+import 'bootstrap/dist/css/bootstrap.css'
+import '../node_modules/font-awesome/css/font-awesome.min.css'
+import Nav from '@/components/Nav'
+import Footer from '@/components/Footer'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -16,7 +18,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body>
+        <Nav />
+        {children}
+        <Footer />
+      </body>
+      <Script src='../lib/jquery/jquery.min.js' />
+      <Script src='../lib/bootstrap/js/bootstrap.min.js' />
+      <Script src='public/js/main.js' />
     </html>
   )
 }
